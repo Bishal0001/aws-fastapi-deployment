@@ -1,0 +1,6 @@
+.process.txt
+__pycache__/
+*.pyc
+.env
+*.pem
+
