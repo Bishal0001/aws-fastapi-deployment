@@ -11,6 +11,7 @@ class PredictionInput(BaseModel):
     collage_tier: int
     skilled: str
     gender: str
+    school: str
 
 
 # ---------- Prediction API (POST) ----------
@@ -24,7 +25,7 @@ def predict_model(data: PredictionInput):
     elif gender == "f":
         gender = "F"
 
-    if (data.age >= 14  and data.collage_tier <= 2 and gender == "M") or data.skilled=='Yes':
+    if ((data.age >= 14  and data.collage_tier <= 2 and gender == "M") or data.skilled=='Yes') and data.school != 'Fail' :
         return {"result": "Employed"}
 
     return {"result": "Not Employed"}
@@ -100,6 +101,16 @@ def home():
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
             </select>
+            <select id="school">
+                <option value="">Select School</option>
+                <option value="GVHS">GVHS</option>
+                <option value="HCCS">HCCS</option>
+                <option value="BBI">BBI</option>
+                <option value="Girls School">Girls School</option>
+                <option value="KV">KV</option>
+                <option value="Chandrapur School">Chandrapur School</option>
+                <option value="Fail">Fail</option>
+            </select>
 
             <button onclick="predict()">Predict</button>
 
@@ -112,6 +123,7 @@ def home():
                 const tier = document.getElementById("tier").value;
                 const gender = document.getElementById("gender").value;
                 const skilled = document.getElementById("skilled").value;
+                const school = document.getElementById("school").value;
 
                 const response = await fetch("/predict", {
                     method: "POST",
@@ -122,7 +134,8 @@ def home():
                         age: parseInt(age),
                         collage_tier: parseInt(tier),
                         gender: gender,
-                        skilled: skilled
+                        skilled: skilled,
+                        school: school
                     })
                 });
 
