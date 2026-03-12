@@ -1,37 +1,3 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
-
-app = FastAPI()
-
-
-# ---------- Define Input Schema ----------
-class PredictionInput(BaseModel):
-    age: int
-    collage_tier: int
-    skilled: str
-    gender: str
-    school: str
-
-
-# ---------- Prediction API (POST) ----------
-@app.post("/predict")
-def predict_model(data: PredictionInput):
-
-    gender = data.gender.lower()
-
-    if gender == "m":
-        gender = "M"
-    elif gender == "f":
-        gender = "F"
-
-    if ((data.age >= 14  and data.collage_tier <= 2 and gender == "M") or data.skilled=='Yes') and data.school != 'Fail' :
-        return {"result": "Employed"}
-
-    return {"result": "Not Employed"}
-
-
-# ---------- Frontend UI ----------
 @app.get("/", response_class=HTMLResponse)
 def home():
     return """
